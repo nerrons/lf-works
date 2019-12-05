@@ -954,21 +954,13 @@ Theorem combine_split : forall X Y (l : list (X * Y)) l1 l2,
   split l = (l1, l2) ->
   combine l1 l2 = l.
 Proof.
-  intros X Y l.
-  induction l as [| n l' IH].
-  - intros l1 l2 H. simpl in H.
-    injection H. intros H1 H2. rewrite <- H1. rewrite <- H2.
-    reflexivity.
-  - intros l1' l2'.
-    destruct n eqn:En.
-    simpl.
-    destruct (split l') eqn:Es.
-    intros H.
-    injection H.
-    intros Hy.
-    intros Hx.
-    rewrite IH.
-    Abort. (* HOW?????????????????????? *)
+  intros X Y l. induction l as [| p l' IHl']; intros.
+  + inversion H. reflexivity.
+  + destruct p as [x y].
+    simpl in H. destruct (split l').
+    inversion H. subst. simpl. rewrite IHl'; reflexivity.
+Qed.
+
 
 (** [] *)
 
@@ -1206,17 +1198,28 @@ Qed.
     things than necessary.  Hint: what property do you need of [l1]
     and [l2] for [split (combine l1 l2) = (l1,l2)] to be true?) *)
 
-(* Definition split_combine_statement : Prop
-   ("[: Prop]" means that we are giving a name to a
-     logical proposition here.) 
-   REPLACE THIS LINE WITH ":= _your_definition_ ."  Abort. *)
+Definition split_combine_statement : Prop :=
+  forall (X Y: Type) l1 l2 (l: list (X * Y)), 
+  length l1 = length l2 ->
+  combine l1 l2 = l ->
+  split l = (l1, l2).
 
-(* Theorem split_combine : split_combine_statement.
+Theorem split_combine : split_combine_statement.
 Proof.
-Abort. *)
+  unfold split_combine_statement.
+  intros X Y l1. induction l1 as [| h1 t1 IHl1]; intros.
+  + simpl in H0. rewrite <- H0. destruct l2.
+    - reflexivity.
+    - inversion H.
+  + destruct l2 as [| h2 t2]; inversion H.
+    destruct l as [| [x y] l']; inversion H0.
+    rewrite H5. simpl.
+    rewrite IHl1 with (l2:=t2); try reflexivity; assumption.
+Qed.
+
 
 (* Do not modify the following line: *)
-(* Definition manual_grade_for_split_combine : option (nat*string) := None. *)
+Definition manual_grade_for_split_combine : option (nat*string) := None.
 (** [] *)
 
 (** **** Exercise: 3 stars, advanced (filter_exercise)  
@@ -1235,15 +1238,11 @@ Proof.
   induction l as [| h t IH].
   - discriminate.
   - intros lf x H.
-    simpl in H.
-    destruct (test h) eqn:Eth in H.
-    + injection H as H0 H1.
-      rewrite <- H0.
-      apply Eth.
-    + apply IH in H.
-      apply H.
+    inversion H. destruct (test h) eqn:Eth.
+    + inversion H1. subst. assumption.
+    + apply (IH lf x H1).
 Qed.
-(* What the hell? The one above looks like pure evil tricks *)
+
 
 (** [] *)
 

@@ -913,45 +913,49 @@ Fixpoint eq_Z (b : bin) : bool :=
   | B b' => false
   end.
 
-Theorem bnbaa_bnba : forall (a : bin),
-  (nat_to_bin (bin_to_nat (A a)) = Z)
-  -> (nat_to_bin (bin_to_nat a) = Z).
+Example AAAZ_eq_Z : eq_Z (A (A (A Z))) = true.
+Proof. reflexivity. Qed.
+
+Theorem incr_norm : forall (b : bin),
+  normalize (incr b) = incr (normalize b).
 Proof.
-  intros a H.
-  induction a as [| a' IHa' | b' IHb'].
+  intros. induction b.
   - reflexivity.
-  - simpl.
-    rewrite <- plus_n_O.
-    Abort.
+  - simpl. destruct (normalize b); reflexivity.
+  - simpl. rewrite IHb. destruct (normalize b); reflexivity.
+Qed.
 
-
-
-Theorem bnb_eq_Z : forall (b : bin),
-  (nat_to_bin (bin_to_nat b) = Z) -> (eq_Z b = true).
+Theorem shift_right : forall (n : nat),
+  nat_to_bin (n + n) = normalize (A (nat_to_bin n)).
 Proof.
-  intros b H.
-  induction b as [| a IHa | c IHc].
+  intros. induction n.
   - reflexivity.
-  - simpl.
-    rewrite IHa.
-    + reflexivity.
-    + Abort.
+  - replace (nat_to_bin (S n + S n)) with (incr (incr (nat_to_bin (n + n)))).
+    + rewrite IHn. repeat (rewrite <- incr_norm). reflexivity.
+    + simpl. rewrite <- plus_n_Sm. reflexivity.
+Qed.
+
+Theorem normalize_fixpoint : forall b,
+  normalize (normalize b) = normalize b.
+Proof.
+  intros. induction b.
+  - reflexivity.
+  - simpl. destruct (normalize b); try reflexivity;
+      inversion IHb; simpl; rewrite H0;
+      simpl; rewrite H0; reflexivity.
+  - simpl. rewrite IHb. reflexivity. 
+Qed. 
 
 Theorem normalize_works : forall (b : bin),
   nat_to_bin (bin_to_nat b) = normalize b.
 Proof.
-  induction b as [| a IHa | c IHc].
+  intros. induction b; try reflexivity;
+    simpl; rewrite <- plus_n_O, shift_right; simpl;
+    rewrite IHb, normalize_fixpoint.
   - reflexivity.
-  - simpl.
-    rewrite <- plus_n_O.
-    induction (normalize a).
-    + rewrite <- IHa.
-Abort.
-
-
-
+  - destruct (normalize b); reflexivity.
+Qed.
       
-
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_binary_inverse_c : option (nat*string) := None.

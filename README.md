@@ -2,6 +2,6 @@
 To test `.v` proof scripts (say, `Induction.v`):
 
 ```
-cd lf-solutions
+cd lf
 make Induction.vo
 ```

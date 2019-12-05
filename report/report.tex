@@ -7,7 +7,7 @@
 %% For single-blind review submission, w/ CCS and ACM Reference
 %\documentclass[sigplan,review]{acmart}\settopmatter{printfolios=true}
 %% For final camera-ready submission, w/ required CCS and ACM Reference
-\documentclass[sigplan]{acmart}\settopmatter{printfolios=true,printccs=false,printacmref=false}
+\documentclass[screen,sigplan]{acmart}\settopmatter{printfolios=true,printccs=false,printacmref=false}
 
 
 %% Conference information
@@ -56,18 +56,12 @@
   Scale=MatchLowercase
 ]
 \usepackage{hyperref}
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=blue,
-    urlcolor=blue,
-}
 
 
 \begin{document}
 
 %% Title information
-\title[ZSQLF]{Exercises in Logical Foundations}         %% [Short Title] is optional;
+\title[ZSQLF]{Going Through Logical Foundations}         %% [Short Title] is optional;
                                         %% when present, will be used in
                                         %% header instead of Full Title.
 %\titlenote{with title note}             %% \titlenote is optional;
@@ -90,11 +84,16 @@
 %% Note: \begin{abstract}...\end{abstract} environment must come
 %% before \maketitle command
 \begin{abstract}
-The goal of the project is to finish the exercises of the textbook, \emph{Logical Foundations}, the
-first volume of the series \emph{Software Foundations}.
-Main focuses of the book include constructive logic, inductive proofs, and the proof assistant, Coq.
+The goal of the project is to finish the exercises of the textbook,
+\href{https://softwarefoundations.cis.upenn.edu/current/lf-current/index.html}{\emph{Logical Foundations}}, the
+first volume of the series
+\href{https://softwarefoundations.cis.upenn.edu/current/index.html}{\emph{Software Foundations}}.
+Main focuses of the book include constructive logic, inductive proofs, and the proof assistant,
+\href{https://coq.inria.fr/}{Coq}.
 I have finished the entire book except for a few optional \slash advanced exercises, and progressed to
-Volume 2 in the series, \emph{Programming Language Foundations}, by three chapters.
+Volume 2 in the series, 
+\href{https://softwarefoundations.cis.upenn.edu/current/plf-current/index.html}{\emph{Programming Language Foundations}},
+by three chapters.
 \end{abstract}
 
 
@@ -105,21 +104,200 @@ Volume 2 in the series, \emph{Programming Language Foundations}, by three chapte
 \maketitle
 
 
-\section{Introduction}
+\section{Metadata}
 
-\subsection[]{Reasons why do this as a project}
+\subsection{Reasons why do this as a project}
 
-Since the content of \emph{Logical Foundations} (including my own solutions to exercises) are fully checked
-by Coq, it is easier to keep track of the work done and get immediate feedback compared to
+The content of \emph{Logical Foundations} (including my own solutions to exercises) are fully checked
+by Coq, meaning that I can easily test the correctness my answers by simply running the proof scripts
+and see if it passes the rigorous examinations. Thus, it is easier to keep track of the work done and get immediate feedback compared to
 traditional books, making \emph{Logical Foundations} especially suitable for self-study.
+Rather than to research a dark, new area, a guided path fits my current situation better.
 
-\subsection{Schedule}
-The first chapter (\texttt{Basics.v}) was finished on 8 October; The last chapter (\texttt{Rel.v}) 
+\subsection{Schedule and organization}
+The book is structured \href{https://softwarefoundations.cis.upenn.edu/lf-current/deps.html}{like a dependency graph}:
+the are core chapters and optional chapters,
+and a suggested route to tackle the most important ones. I followed it; I completed the route
+and then went through the optionals.
+
+The first chapter (\texttt{Basics.v}) was finished on 8 October. The last chapter (\texttt{Rel.v}) 
 was finished on 24 November. After that, I continued to work on Volume 2 because it was fun.
 
 \subsection{Deliverables}
-The proof scripts (my solutions to the book) are uploaded to a
-\href{https://github.com/nerrons/lf-works}{GitHub repository}: \url{https://github.com/nerrons/lf-works}.
+The proof scripts (i.e. the content of the book, plus my solutions to the exercises)
+are uploaded to a \href{https://github.com/nerrons/lf-works}{GitHub repository}. Since
+the authors forbid public distributions of the solutions to the exercises, I try not to reference
+the name of the book in the repository.
+
+
+
+\section{Notes on core chapters}
+
+The order follows the suggested route. Here, when I state "all exercises done", I do not consider written
+assignments that require manual grading (they cannot be formally checked, so I did not pay much attention
+to them).
+
+\subsection{\texttt{Basics.v}}
+This chapter is the indroduction to all introductions. It familiarizes the reader with the basic syntax of Coq
+and essential concepts of functional programming.
+Logic-wise, it touches inductively defined types, and proof using
+basic tactics like simplification, rewriting and case analysis.
+
+All exercises done.
+
+
+\subsection{\texttt{Induction.v}}
+This is a mind-blowing chapter that surveys the consolidation of mathematical thoughts into trusted programs.
+It covers proof by induction and relationship between formal and informal proofs.
+This is one of the most important chapters in the book: it shows how reasoning and programming can be
+combined to establish knowledge (even though, for now it is only trivial ones like \texttt{n + 0 = n}).
+
+All exercises done, including one gigantic, 5-star proof from an earlier version of the book, which
+got deleted this year.
+
+
+\subsection{\texttt{Lists.v}}
+This chapter introduces data structures that can be reasoned. Like all books on functional programming,
+it starts with defining pairs, then lists. The more interesting part is where it extends induction from
+natural numbers to more inductively defined data structures, which enables the reasoning about lists. It
+also covers more data structures including options and partial maps.
+
+All exercises done.
+
+
+\subsection{\texttt{Poly.v}}
+This chapter subtly shifts the focus to types by introducing polymorphism and higher-order functions.
+The content is similar to a typical Haskell book.
+Most reasoning is still done with induction, so logic-wise, nothing much new.
+
+All exercises done.
+
+
+\subsection{\texttt{Tactics.v}}
+This chapter introduces various tactics that can be used in Coq to complete proofs;
+most of them are Coq specific. Logic-wise, a discussion on how general induction hypotheses should be
+is helpful.
+
+All exercises done.
+
+
+\subsection{\texttt{Logic.v}}
+This chapter focuses on propositions: what they are and how to manipulate them.
+Topics covered include: 
+\begin{itemize}
+  \item logical connectives (conjunction, disjunction and nagation)
+  \item truth and falsehoods
+  \item logical equivalence
+  \item existential qualification
+\end{itemize}
+and how to program and reason about these concepts. Finally, it discusses
+differences between standard mathematics' logic foundation, Set Theory, and Coq's
+logical core, the Calculus of Inductive Constructions.
+\begin{itemize}
+  \item functional extensionality
+  \item relationship between propositions and booleans
+  \item excludded middle.
+\end{itemize}
+
+This chapter is closely related to our module.
+
+All exercises done, except for the last 5-star, optional problem, which was too difficult for me.
+
+
+\subsection{\texttt{IndProp.v}}
+This chapter focuses on inductively defined propositions. It shows a powerful way to reason: inductively
+define propositions with evidence and, naturally, use induction on them. The importance of this chapter
+lies in subsequent chapters.
+
+This chapter has some hard problems. Most exercises are done. Two optional exercises related to regex parsers are currently too difficult.
+
+
+\subsection{\texttt{Maps.v}}
+This is a short chapter that defines the data structure, map, which will be used to store states
+of another programming language in the following chapter.
+
+All exercises done.
+
+\subsection{\texttt{Imp.v}}
+This is an exciting chapter where a imperative toy language, Imp, is designed, implemented and reasoned.
+Coq provides powerful tools to express the syntax and semantics of Imp,
+to run Imp programs, and to reason about their behaviors, all using \texttt{IndProp}s.
+
+Most exercises done; 4 optional problems left.
+
+
+\subsection{\texttt{Auto.v}}
+This chapter presents more ways to streamline proof scripts.
+
+There are no exercises for this chapter.
+
+
+
+\section{Notes on optional chapters}
+
+\subsection{\texttt{ImpParser.v} \& \texttt{Extraction.v}}
+These chapters takes a closer look at the underlying lexing and parsing mechanism for Imp
+programs and shows how to compile Coq code to efficient ML code.
+
+There are no exercises for these chapters.
+
+
+\subsection{\texttt{ImpCEvalFun.v}}
+In \texttt{Imp.v}, evaluations of Imp programs are defined using relations. In this chapter we
+attempt to represent evaluation using Coq functions. It provides deeper understanding on differences
+and similarities between functions and inductively defined propositions.
+
+All exercises done.
+
+
+\subsection{\texttt{ProofObjects.v}}
+This chapter reveals a deeper connection between logic and computation: how propositions correspond
+to types, and how proof corresponds to data values. Topics covered include:
+\begin{itemize}
+  \item using proof objects as values
+  \item relationship between quantifiers, implications and functions
+  \item logical connectives as inductive types
+  \item inductive definition of equality
+\end{itemize}
+Though short, this chapter is particularly interesting.
+
+All exercises done.
+
+
+\subsection{\texttt{IndPrinciples.v}}
+This chapter takes a closer look at induction: how the way of reasoning is realized using
+induction principles, which are in fact theorems. The chapter also discusses the relationship between
+formal and informal inductive proofs.
+
+All exercises done.
+
+
+\subsection{\texttt{Rel.v}}
+This chapter is a case study on binary relations, the main focus being proving properties
+of them. It will be useful in \emph{Programming Language Foundations}.
+
+All exercises done.
+
+
+\section{Notes on Volume 2: \emph{Programming Language Foundations}}
+
+\subsection{\texttt{Equiv.v}}
+From this chapter on, the training in logic and Coq gained in \emph{Logical Foundations}
+is put to use to study programming language theory. This chapter focuses on establishing
+equivalence between Imp programs.
+
+All exercises done, except for one 5-star optional problem.
+
+\subsection{\texttt{Hoare.v} \& \texttt{Hoare2.v}}
+This chapter focuses on formalizing Hoare Logic, a systematic compositional approach used 
+to annotate programs and reason about their behaviors.
+
+Most exercises done; 4 optional, 4/5-star problems left.
+
+
+\section{Conclusion}
+Nothing much to say; I find it extremely pleasurable and satisfying working through the
+exercises, and it has indeed prepared me for deeper content on logic and PLT.
 
 
 %% Acknowledgments
@@ -138,9 +316,9 @@ The proof scripts (my solutions to the book) are uploaded to a
 
 
 %% Appendix
-\appendix
-\section{Appendix}
+%\appendix
+%\section{Appendix}
 
-Text of appendix \ldots
+%Text of appendix \ldots
 
 \end{document}
