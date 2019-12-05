@@ -381,8 +381,12 @@ Definition and_comm' P Q : P /\ Q <-> Q /\ P :=
 
     Construct a proof object demonstrating the following proposition. *)
 
-Definition conj_fact : forall P Q R, P /\ Q -> Q /\ R -> P /\ R
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition conj_fact : forall P Q R, P /\ Q -> Q /\ R -> P /\ R :=
+  fun (P Q R : Prop) => fun (Hpq : P /\ Q) (Hqr : Q /\ R) =>
+    match Hpq, Hqr with
+    | conj Hp Hq1, conj Hq2 Hr => conj Hp Hr
+    end.
+
 (** [] *)
 
 (* ================================================================= *)
@@ -411,8 +415,13 @@ End Or.
     Try to write down an explicit proof object for [or_commut] (without
     using [Print] to peek at the ones we already defined!). *)
 
-Definition or_comm : forall P Q, P \/ Q -> Q \/ P
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition or_comm : forall P Q, P \/ Q -> Q \/ P :=
+  fun (P Q : Prop) (Hpq : P \/ Q) =>
+    match Hpq with
+    | or_introl p => or_intror p
+    | or_intror q => or_introl q
+    end.
+
 (** [] *)
 
 (* ================================================================= *)
@@ -452,8 +461,8 @@ Definition some_nat_is_even : exists n, even n :=
 
     Complete the definition of the following proof object: *)
 
-Definition ex_ev_Sn : ex (fun n => even (S n))
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Definition ex_ev_Sn : ex (fun n => even (S n)) :=
+  ex_intro (fun n => even (S n)) 1 (ev_SS 0 ev_0).
 (** [] *)
 
 (* ================================================================= *)
@@ -545,7 +554,9 @@ Definition singleton : forall (X:Type) (x:X), []++[x] == x::[]  :=
 Lemma equality__leibniz_equality : forall (X : Type) (x y: X),
   x == y -> forall P:X->Prop, P x -> P y.
 Proof.
-(* FILL IN HERE *) Admitted.
+  intros. inversion H. subst. apply H0.
+Qed.
+
 (** [] *)
 
 (** **** Exercise: 5 stars, standard, optional (leibniz_equality__equality)  
@@ -556,7 +567,13 @@ Proof.
 Lemma leibniz_equality__equality : forall (X : Type) (x y: X),
   (forall P:X->Prop, P x -> P y) -> x == y.
 Proof.
-(* FILL IN HERE *) Admitted.
+  intros.
+  assert (Id : x = x -> x = y). { apply H. }
+  replace y with x.
+  - apply eq_refl.
+  - apply Id. reflexivity.
+Qed.
+
 
 (** [] *)
 

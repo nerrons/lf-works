@@ -210,17 +210,18 @@ Definition test_ceval (st:state) (c:com) :=
    [X] (inclusive: [1 + 2 + ... + X]) in the variable [Y].  Make sure
    your solution satisfies the test that follows. *)
 
-Definition pup_to_n : com
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
-
-(* 
+Definition pup_to_n : com :=
+  Y ::= 0;;
+  WHILE 1 <= X DO
+    Y ::= Y + X;;
+    X ::= X - 1
+  END
+.
 
 Example pup_to_n_1 :
   test_ceval (X !-> 5) pup_to_n
   = Some (0, 15, 0).
 Proof. reflexivity. Qed.
-
-    [] *)
 
 (** **** Exercise: 2 stars, standard, optional (peven)  
 
@@ -363,7 +364,36 @@ Theorem ceval__ceval_step: forall c st st',
 Proof.
   intros c st st' Hce.
   induction Hce.
-  (* FILL IN HERE *) Admitted.
+  - exists 1. reflexivity.
+  - exists 1. simpl. rewrite H. reflexivity.
+  - destruct IHHce1 as [i1 IH1].
+    destruct IHHce2 as [i2 IH2].
+    exists (1 + i1 + i2). simpl.
+    destruct (ceval_step st c1 (i1 + i2)) eqn:E;
+      apply (ceval_step_more i1 (i1 + i2)) in IH1; try omega;
+      rewrite IH1 in E; inversion E.
+    apply (ceval_step_more i2 (i1 + i2)) in IH2; try omega.
+    rewrite <- H0.
+    apply IH2.
+  - destruct IHHce as [i IH].
+    exists (1 + i). simpl.
+    destruct (beval st b); congruence.
+  - destruct IHHce as [i IH].
+    exists (1 + i). simpl.
+    destruct (beval st b); congruence.
+  - exists 1. simpl. rewrite H. reflexivity.
+  - destruct IHHce1 as [i1 IH1].
+    destruct IHHce2 as [i2 IH2].
+    exists (1 + i1 + i2). simpl.
+    rewrite H.
+    destruct (ceval_step st c (i1 + i2)) eqn:E;
+      apply (ceval_step_more i1 (i1 + i2)) in IH1; try omega;
+      rewrite IH1 in E; inversion E.
+    + apply (ceval_step_more i2 (i1 + i2)) in IH2; try omega.
+      rewrite <- H1.
+      apply IH2.
+Qed.
+
 (** [] *)
 
 Theorem ceval_and_ceval_step_coincide: forall c st st',

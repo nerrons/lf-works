@@ -30,8 +30,16 @@ nlia.cache
 nra.cache
 *.out
 *.log
-*.pdf
 *.cls
 *.cut
 *.bst
 .DS_Store
+*Test.v
+*.ml
+*.mli
+LICENSE
+lf-solution/README
+*.html
+lf/common
+plf/common
+deps.gif
